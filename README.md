@@ -1,0 +1,1 @@
+# ShopEdge__client-side
