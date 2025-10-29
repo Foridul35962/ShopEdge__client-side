@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaUserCircle, FaShoppingBag } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
 import Searchbar from './Searchbar';
-import CartDrawer from './CartDrawer';
+import CartDrawer from '../cart/CartDrawer';
 import { HiMenuAlt2, HiMenuAlt3 } from 'react-icons/hi';
 import Menu from './Menu';
 

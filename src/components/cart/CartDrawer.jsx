@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
-import CartContent from '../cart/CartContent';
+import CartContent from './CartContent';
 
 const CartDrawer = ({drawer, setDrawer}) => {
   return (
