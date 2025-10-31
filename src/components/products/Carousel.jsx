@@ -122,7 +122,7 @@ const Carousel = () => {
                 {
                     products.map((product, idx) => (
                         <div key={idx} className='min-w-full sm:min-w-1/2 lg:min-w-1/3 relative'>
-                            <img src={product.images[0].url} alt={product.images[0].altText} className='w-full rounded-lg object-cover' />
+                            <img src={product.images[0].url} alt={product.images[0].altText} draggable='false' className='w-full rounded-lg object-cover' />
                             <div className='absolute bottom-0 left-0 right-0 bg-opacity-50 backdrop-blur-sm text-white p-4 rounded-b-lg'>
                                 <Link to={`/product/${product._id}`} className='block'>
                                 <h4 className='font-medium'>{product.name}</h4>
