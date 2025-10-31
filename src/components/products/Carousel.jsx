@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -77,17 +77,48 @@ const Carousel = () => {
             }]
         },
     ]
+
+    const scrollRef = useRef(null)
+    const [isDragging, setIsDragging] = useState(false)
+    const [startX, setStartX] = useState(0)
+    const [scrollLeft, setScrollLeft] = useState(false)
+    const [canScrollLeft, setCanScrollLeft] = useState(false)
+    const [canScrollRight, setCanScrollRight] = useState(true)
+
+
+    const scroll = (direction)=>{
+        const scrollAmount = direction === 'left'? -300 : 300
+        scrollRef.current.scrollBy({left: scrollAmount, behaviour: 'smooth'})
+    }
+
+    const updateScrollButtons = () =>{
+        const container = scrollRef.current
+        if (container) {
+            const leftScroll = container.scrollLeft
+            const rightScrollable = container.scrollWidth > leftScroll + container.clientWidth
+            setCanScrollLeft(leftScroll>0)
+            setCanScrollRight(rightScrollable)
+        }        
+    }
+    useEffect(()=>{
+        const container = scrollRef.current
+        if (container) {
+            container.addEventListener('scroll', updateScrollButtons)
+            updateScrollButtons()
+        }
+    })
+
     return (
         <div>
             <div className='flex flex-col gap-1.5 text-center'>
                 <h1 className='text-2xl font-bold'>Explore New Arrivals</h1>
                 <h3 className='text-sm'>Discover the latest styles straight off the runway, freshly added to keep your wardrabe on the cutting edge of fashion</h3>
             </div>
-            <div className='text-2xl flex gap-3 justify-end-safe pr-10 py-3 *:cursor-pointer *:hover:scale-105 *:active:scale-100 *:transform *:transition-all *:duration-300'>
-                <button><FaArrowAltCircleLeft /></button>
-                <button><FaArrowAltCircleRight /></button>
+            <div className='text-2xl flex gap-3 justify-end-safe pr-10 py-3'>
+                <button onClick={()=>scroll('left')} disabled={!canScrollLeft} className={canScrollLeft ? 'cursor-pointer hover:scale-105 active:scale-100 transform transition-all duration-300' : 'text-gray-500 cursor-not-allowed'} ><FaArrowAltCircleLeft /></button>
+                <button onClick={()=>scroll('right')} disabled={!canScrollRight} className={canScrollRight ? 'cursor-pointer hover:scale-105 active:scale-100 transform transition-all duration-300' : 'text-gray-500 cursor-not-allowed'} ><FaArrowAltCircleRight /></button>
             </div>
-            <div className='container mx-auto flex overflow-x-scroll space-x-6 gap-3 py-2'>
+            <div ref={scrollRef} className='container mx-auto flex overflow-x-scroll space-x-6 gap-3 py-2'>
                 {
                     products.map((product, idx) => (
                         <div key={idx} className='min-w-full sm:min-w-1/2 lg:min-w-1/3 relative'>
