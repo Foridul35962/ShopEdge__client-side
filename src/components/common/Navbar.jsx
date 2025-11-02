@@ -24,7 +24,7 @@ const Navbar = () => {
                     <p>BOTTUM WEAR</p>
                 </div>
                 <div className='flex gap-4 items-center text-2xl'>
-                    <FaUserCircle onClick={()=>navigate('/login')} className='cursor-pointer' />
+                    <FaUserCircle onClick={()=>navigate('/user')} className='cursor-pointer' />
                     <div className='relative'>
                         <FaShoppingBag className='cursor-pointer' onClick={()=>setDrawer(!drawer)} />
                         <p className='absolute px-1 -top-2 -right-2 text-[16px] bg-red-700 rounded-full'>0</p>
