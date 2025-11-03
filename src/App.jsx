@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Registration from './pages/Registration'
 import User from './pages/User'
+import Collections from './pages/Collections'
 
 const App = () => {
   const router = createBrowserRouter([{
@@ -26,6 +27,10 @@ const App = () => {
       {
         path:'/user',
         element: <User />
+      },
+      {
+        path:'/collections/:collection',
+        element: <Collections />
       },
     ]
   }])

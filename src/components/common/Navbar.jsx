@@ -18,7 +18,7 @@ const Navbar = () => {
                     ShopEdge
                 </div>
                 <div className='sm:flex gap-5 hidden *:cursor-pointer'>
-                    <p>MEN</p>
+                    <p onClick={()=>navigate('/collections/all')}>MEN</p>
                     <p>WOMEN</p>
                     <p>TOP WEAR</p>
                     <p>BOTTUM WEAR</p>
