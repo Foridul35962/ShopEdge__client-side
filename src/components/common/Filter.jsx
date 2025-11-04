@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Filter = () => {
+const Filter = ({setIsSidebarOpen}) => {
   return (
     <div>Filter</div>
   )

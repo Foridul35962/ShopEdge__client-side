@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Filter from '../components/common/Filter';
 import { FaFilter } from 'react-icons/fa';
+import ProductGrid from '../components/products/ProductGrid';
 
 const Collections = () => {
     const [products, setProducts] = useState([])
@@ -96,23 +97,24 @@ const Collections = () => {
     }
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside)
-        return ()=>document.removeEventListener('mousedown', handleClickOutside)
-    },[])
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
 
 
     return (
-        <div className='px-5 sm:px-0'>
+        <div className='px-5 sm:px-0 flex flex-col sm:flex-row gap-0 sm:gap-5 w-full'>
             <div className='flex flex-col sm:flex-row'>
                 <div className='sm:hidden flex justify-between items-center'>
                     <p className='text-2xl font-bold'>Filter</p>
                     <FaFilter ref={filterBtnRef} onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
                 </div>
             </div>
-            <div ref={sidebarRef} className={`${isSidebarOpen? "translate-x-0" : '-translate-x-full'} fixed inset-y-0 z-50 left-0 w-64 bg-gray-800 overflow-y-auto transition-transform duration-300 sm:static sm:translate-x-0`}>
-                <Filter />
+            <div ref={sidebarRef} className={`${isSidebarOpen ? "translate-x-0" : '-translate-x-full'} fixed inset-y-0 z-50 left-0 w-auto sm:w-1/5 bg-gray-800 overflow-y-auto transition-transform duration-300 sm:static shadow-2xl shadow-black sm:-translate-x-5`}>
+                <Filter setIsSidebarOpen={setIsSidebarOpen} />
             </div>
-            <div>
-                
+            <div className='sm:w-4/5 flex flex-col w-full py-3 sm:pr-5'>
+                <p className='text-3xl font-bold text-center'>All Collections</p>
+                <ProductGrid products={products} />
             </div>
         </div>
     )
