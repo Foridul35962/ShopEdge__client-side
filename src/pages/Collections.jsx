@@ -109,7 +109,7 @@ const Collections = () => {
                     <FaFilter ref={filterBtnRef} onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
                 </div>
             </div>
-            <div ref={sidebarRef} className={`${isSidebarOpen ? "translate-x-0" : '-translate-x-full'} fixed inset-y-0 z-50 left-0 w-auto sm:w-1/5 bg-gray-800 overflow-y-auto transition-transform duration-300 sm:static shadow-2xl shadow-black sm:-translate-x-5`}>
+            <div ref={sidebarRef} className={`${isSidebarOpen ? "translate-x-0" : '-translate-x-full'} fixed inset-y-0 z-50 left-0 w-auto overflow-hidden sm:w-1/5 bg-gray-800 overflow-y-auto transition-transform duration-300 sm:static shadow-2xl shadow-black sm:-translate-x-5`}>
                 <Filter setIsSidebarOpen={setIsSidebarOpen} />
             </div>
             <div className='sm:w-4/5 flex flex-col w-full py-3 sm:pr-5'>
