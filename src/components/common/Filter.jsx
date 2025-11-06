@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AiOutlineClose } from 'react-icons/ai';
 
 const Filter = ({ setIsSidebarOpen }) => {
@@ -15,7 +15,6 @@ const Filter = ({ setIsSidebarOpen }) => {
     maxPrice: 100
   })
 
-  const [priceRange, setPriceRange] = useState([0, 100])
   const categories = ['Top Wear', 'Bottom Wear']
   const colors = [
     'Red',
@@ -59,26 +58,47 @@ const Filter = ({ setIsSidebarOpen }) => {
       size: params.size ? params.size.split(',') : [],
       material: params.material ? params.material.split(',') : [],
       brand: params.brand ? params.brand.split(',') : [],
-      minPrice: params.minPrice || 0,
-      maxPrice: params.maxPrice || 100
+      minPrice: params.minPrice ? Number(params.minPrice) : 0,
+      maxPrice: params.maxPrice ? Number(params.maxPrice) : 100
     })
-    setPriceRange([0, params.maxPrice || 100])
   }, [searchParams])
 
-  const handleFilterChange = (e) =>{
-    const {name, value, checked, type} = e.target
-    let newFilter = {...filters}
+  const handleFilterChange = (e) => {
+    const { name, value, checked, type } = e.target
+    let newFilter = { ...filters }
     if (type === 'checkbox') {
       if (checked) {
         newFilter[name] = [...(newFilter[name] || []), value]
       } else {
-        newFilter[name] = newFilter[name].filter((item)=> item !== value)
+        newFilter[name] = newFilter[name].filter((item) => item !== value)
       }
     } else {
       newFilter[name] = value
     }
     setFilters(newFilter)
+    updateURLParams(newFilter)
   }
+
+  const updateURLParams = (newFilters) => {
+  const params = new URLSearchParams();
+
+  Object.keys(newFilters).forEach((key) => {
+    const value = newFilters[key];
+
+    if (Array.isArray(value) && value.length > 0) {
+      params.append(key, value.join(","));
+    } 
+    else if (typeof value === "string" && value.trim() !== "") {
+      params.append(key, value);
+    }
+    else if (typeof value === "number") {
+      params.append(key, value);
+    }
+  });
+
+  setSearchParams(params);
+};
+
   return (
     <div className='flex flex-col gap-3 text-white p-3 min-w-[280px] overflow-hidden'>
       <div className='flex justify-between items-center'>
@@ -93,8 +113,14 @@ const Filter = ({ setIsSidebarOpen }) => {
           {
             categories.map((category, idx) => (
               <div key={idx} className='flex gap-2'>
-                <input type="radio" id={category} name='category' onChange={handleFilterChange} value={category} />
-                <label htmlFor={category}>{category}</label>
+                <input type="radio"
+                  id={category}
+                  name='category'
+                  checked={filters.category === category}
+                  className='cursor-pointer'
+                  onChange={handleFilterChange}
+                  value={category} />
+                <label htmlFor={category} className='cursor-pointer'>{category}</label>
               </div>
             ))
           }
@@ -107,9 +133,15 @@ const Filter = ({ setIsSidebarOpen }) => {
         <div>
           {
             gender.map((value, idx) => (
-              <div key={idx} className='flex gap-2'>
-                <input type="radio" name="gender" id={value} onChange={handleFilterChange} value={value} />
-                <label htmlFor={value}>{value}</label>
+              <div key={idx} className='flex gap-2 cursor-pointer'>
+                <input type="radio"
+                  name="gender"
+                  id={value}
+                  checked={filters.gender === value}
+                  className='cursor-pointer'
+                  onChange={handleFilterChange}
+                  value={value} />
+                <label htmlFor={value} className='cursor-pointer'>{value}</label>
               </div>
             ))
           }
@@ -122,7 +154,12 @@ const Filter = ({ setIsSidebarOpen }) => {
         <div className='flex flex-wrap gap-2'>
           {
             colors.map((color, idx) => (
-              <button key={color} value={color} name='color' onClick={handleFilterChange} className='size-8 rounded-full border-2 border-gray-300 cursor-pointer transition hover:scale-105' style={{ backgroundColor: color.toLocaleLowerCase() }}></button>
+              <button key={color}
+                value={color}
+                name='color'
+                onClick={handleFilterChange}
+                className={`size-8 rounded-full cursor-pointer transition hover:scale-105 ${filters.color === color && 'ring-2 ring-orange-500'}`}
+                style={{ backgroundColor: color.toLocaleLowerCase() }}></button>
             ))
           }
         </div>
@@ -135,8 +172,14 @@ const Filter = ({ setIsSidebarOpen }) => {
           {
             sizes.map((size, idx) => (
               <div key={idx} className='flex gap-2'>
-                <input type="checkbox" name="size" onChange={handleFilterChange} id={size} value={size} />
-                <label htmlFor={size}>{size}</label>
+                <input type="checkbox"
+                  name="size"
+                  onChange={handleFilterChange}
+                  checked={filters.size.includes(size)}
+                  className='cursor-pointer'
+                  id={size}
+                  value={size} />
+                <label htmlFor={size} className='cursor-pointer'>{size}</label>
               </div>
             ))
           }
@@ -150,8 +193,14 @@ const Filter = ({ setIsSidebarOpen }) => {
           {
             materials.map((material, idx) => (
               <div key={idx} className='flex gap-2'>
-                <input type="checkbox" name="material" id={material} onChange={handleFilterChange} value={material} />
-                <label htmlFor={material}>{material}</label>
+                <input type="checkbox"
+                  name="material"
+                  id={material}
+                  checked={filters.material.includes(material)}
+                  onChange={handleFilterChange}
+                  className='cursor-pointer'
+                  value={material} />
+                <label htmlFor={material} className='cursor-pointer'>{material}</label>
               </div>
             ))
           }
@@ -165,8 +214,13 @@ const Filter = ({ setIsSidebarOpen }) => {
           {
             brands.map((brand, idx) => (
               <div key={idx} className='flex gap-2'>
-                <input type="checkbox" name="brand" id={brand} onChange={handleFilterChange} value={brand} />
-                <label htmlFor={brand}>{brand}</label>
+                <input type="checkbox"
+                  name="brand" id={brand}
+                  checked={filters.brand.includes(brand)}
+                  onChange={handleFilterChange}
+                  className='cursor-pointer'
+                  value={brand} />
+                <label htmlFor={brand} className='cursor-pointer'>{brand}</label>
               </div>
             ))
           }
@@ -177,10 +231,19 @@ const Filter = ({ setIsSidebarOpen }) => {
       <div className='flex flex-col gap-2 sm:w-30 md:w-35 lg:w-45 xl:w-60 overflow-hidden'>
         <h1 className='text-xl font-semibold'>Price Range</h1>
         <div className='flex flex-col gap-1'>
-          <input type="range" name="priceRange" id="priceRange" onChange={handleFilterChange} min={0} max={100} className='w-full h-2 bg-red-700 rounded-lg cursor-pointer' />
-          <div className='flex justify-between text-gray-600'>
+          <input
+            type="range"
+            name="maxPrice"
+            min={0}
+            max={100}
+            value={filters.maxPrice}
+            onChange={handleFilterChange}
+            className='w-full h-2 bg-red-700 rounded-lg cursor-pointer'
+          />
+
+          <div className='flex justify-between text-gray-300'>
             <span>$0</span>
-            <span>${priceRange[0]}</span>
+            <span>${filters.maxPrice}</span>
           </div>
         </div>
       </div>
