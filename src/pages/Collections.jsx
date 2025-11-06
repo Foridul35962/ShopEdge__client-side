@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Filter from '../components/common/Filter';
 import { FaFilter } from 'react-icons/fa';
 import ProductGrid from '../components/products/ProductGrid';
+import Filter from '../components/filters/Filter';
+import SortOptions from '../components/filters/SortOptions';
 
 const Collections = () => {
     const [products, setProducts] = useState([])
@@ -114,6 +115,9 @@ const Collections = () => {
             </div>
             <div className='sm:w-4/5 flex flex-col w-full py-3 sm:pr-5'>
                 <p className='text-3xl font-bold text-center'>All Collections</p>
+                <div>
+                    <SortOptions />
+                </div>
                 <ProductGrid products={products} />
             </div>
         </div>

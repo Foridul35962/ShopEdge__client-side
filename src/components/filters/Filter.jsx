@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { AiOutlineClose } from 'react-icons/ai';
 
 const Filter = ({ setIsSidebarOpen }) => {
@@ -80,24 +80,24 @@ const Filter = ({ setIsSidebarOpen }) => {
   }
 
   const updateURLParams = (newFilters) => {
-  const params = new URLSearchParams();
+    const params = new URLSearchParams();
 
-  Object.keys(newFilters).forEach((key) => {
-    const value = newFilters[key];
+    Object.keys(newFilters).forEach((key) => {
+      const value = newFilters[key];
 
-    if (Array.isArray(value) && value.length > 0) {
-      params.append(key, value.join(","));
-    } 
-    else if (typeof value === "string" && value.trim() !== "") {
-      params.append(key, value);
-    }
-    else if (typeof value === "number") {
-      params.append(key, value);
-    }
-  });
+      if (Array.isArray(value) && value.length > 0) {
+        params.append(key, value.join(","));
+      }
+      else if (typeof value === "string" && value.trim() !== "") {
+        params.append(key, value);
+      }
+      else if (typeof value === "number") {
+        params.append(key, value);
+      }
+    });
 
-  setSearchParams(params);
-};
+    setSearchParams(params);
+  };
 
   return (
     <div className='flex flex-col gap-3 text-white p-3 min-w-[280px] overflow-hidden'>

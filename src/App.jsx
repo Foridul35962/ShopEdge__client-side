@@ -6,6 +6,8 @@ import Login from './pages/Login'
 import Registration from './pages/Registration'
 import User from './pages/User'
 import Collections from './pages/Collections'
+import ProductDetails from './components/products/ProductDetails'
+import CheckOut from './components/checkout/CheckOut'
 
 const App = () => {
   const router = createBrowserRouter([{
@@ -31,6 +33,14 @@ const App = () => {
       {
         path:'/collections/:collection',
         element: <Collections />
+      },
+      {
+        path:'/product/:id',
+        element: <ProductDetails />
+      },
+      {
+        path:'/checkout',
+        element: <CheckOut />
       },
     ]
   }])
