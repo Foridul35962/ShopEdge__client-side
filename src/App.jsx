@@ -8,6 +8,7 @@ import User from './pages/User'
 import Collections from './pages/Collections'
 import ProductDetails from './components/products/ProductDetails'
 import CheckOut from './components/checkout/CheckOut'
+import OrderConfirmation from './pages/OrderConfirmation'
 
 const App = () => {
   const router = createBrowserRouter([{
@@ -41,6 +42,10 @@ const App = () => {
       {
         path:'/checkout',
         element: <CheckOut />
+      },
+      {
+        path:'/order-confirmation',
+        element: <OrderConfirmation />
       },
     ]
   }])
