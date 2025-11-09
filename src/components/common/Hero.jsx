@@ -11,7 +11,7 @@ const Hero = () => {
                 <h1 className='text-xl sm:text-4xl font-bold mb-2'>Vacation<br />Ready</h1>
                 <h3 className='text-sm sm:text-2xl mb-4'>Explore our vacation outfits with fast worldwide shipping</h3>
                 <button
-                    onClick={() => navigate('/products')} className='bg-white text-black px-4 sm:px-3 py-2 sm:py-1 rounded-lg hover:bg-gray-200 transition'>
+                    onClick={() => navigate('/collections/all')} className='bg-white cursor-pointer text-black px-4 sm:px-3 py-2 sm:py-1 rounded-lg hover:bg-gray-200 transition'>
                     Shop Now
                 </button>
             </div>

@@ -35,6 +35,7 @@ const CheckOut = () => {
             country: e.target.country.value,
             phone: e.target.phone.value
         }
+        navigate('/order-confirmation')
     }
 
     return (
