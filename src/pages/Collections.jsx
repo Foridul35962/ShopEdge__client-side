@@ -18,7 +18,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 2,
                 name: 'Product 1',
                 price: 110,
                 image: [{
@@ -27,7 +27,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 3,
                 name: 'Product 1',
                 price: 110,
                 image: [{
@@ -36,7 +36,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 4,
                 name: 'Product 1',
                 price: 110,
                 image: [{
@@ -45,7 +45,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 5,
                 name: 'Product 1',
                 price: 110,
                 image: [{
@@ -54,7 +54,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 6,
                 name: 'Product 1',
                 price: 110,
                 image: [{
@@ -63,7 +63,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 7,
                 name: 'Product 1',
                 price: 110,
                 image: [{
@@ -72,7 +72,7 @@ const Collections = () => {
                 }]
             },
             {
-                _id: 1,
+                _id: 8,
                 name: 'Product 1',
                 price: 110,
                 image: [{
