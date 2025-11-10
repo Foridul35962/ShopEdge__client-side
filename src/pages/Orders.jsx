@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import UserInfo from '../components/common/UserInfo'
 import AllOrders from '../components/cart/AllOrders'
 
-const User = () => {
+const Orders = () => {
     const navigate = useNavigate()
     const [isLoggedIn, setisLoggedIn] = useState(true)
     useEffect(() => {
@@ -25,4 +25,4 @@ const User = () => {
     )
 }
 
-export default User
+export default Orders
