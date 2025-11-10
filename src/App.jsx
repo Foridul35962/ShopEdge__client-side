@@ -4,11 +4,12 @@ import UserLayout from './components/layout/UserLayout'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Registration from './pages/Registration'
-import User from './pages/User'
+import Orders from './pages/Orders'
 import Collections from './pages/Collections'
 import ProductDetails from './components/products/ProductDetails'
 import CheckOut from './components/checkout/CheckOut'
 import OrderConfirmation from './pages/OrderConfirmation'
+import OrderDetails from './pages/OrderDetails'
 
 const App = () => {
   const router = createBrowserRouter([{
@@ -28,8 +29,8 @@ const App = () => {
         element: <Registration />
       },
       {
-        path:'/user',
-        element: <User />
+        path:'/orders',
+        element: <Orders />
       },
       {
         path:'/collections/:collection',
@@ -46,6 +47,10 @@ const App = () => {
       {
         path:'/order-confirmation',
         element: <OrderConfirmation />
+      },
+      {
+        path:'/order-details/:id',
+        element: <OrderDetails />
       },
     ]
   }])

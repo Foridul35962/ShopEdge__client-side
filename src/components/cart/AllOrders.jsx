@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const AllOrders = () => {
+    const navigate = useNavigate()
     const orders = [
         {
             _id: '1234',
@@ -73,7 +75,7 @@ const AllOrders = () => {
                                                     className="w-14 h-14 object-cover rounded-lg"
                                                 />
                                             </td>
-                                            <td className="p-1 lg:p-3 border-r border-gray-300 last:border-r-0">{item._id}</td>
+                                            <td onClick={()=>navigate(`/order-details/${item._id}`)} className="p-1 lg:p-3 border-r border-gray-300 last:border-r-0 cursor-pointer hover:underline">{item._id}</td>
                                             <td className="p-1 lg:p-3 border-r border-gray-300 last:border-r-0">{item.created}</td>
                                             <td className="p-1 lg:p-3 border-r border-gray-300 last:border-r-0">{item.shippingAddress}</td>
                                             <td className="p-1 lg:p-3 border-r border-gray-300 last:border-r-0">{item.items}</td>
