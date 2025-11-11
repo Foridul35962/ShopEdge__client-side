@@ -10,52 +10,59 @@ import ProductDetails from './components/products/ProductDetails'
 import CheckOut from './components/checkout/CheckOut'
 import OrderConfirmation from './pages/OrderConfirmation'
 import OrderDetails from './pages/OrderDetails'
+import AdminLayout from './pages/AdminLayout'
 
 const App = () => {
-  const router = createBrowserRouter([{
-    path: '/',
-    element: <UserLayout />,
-    children: [
-      {
-        path: '/',
-        element: <Home />
-      },
-      {
-        path:'/login',
-        element: <Login />
-      },
-      {
-        path:'/registration',
-        element: <Registration />
-      },
-      {
-        path:'/orders',
-        element: <Orders />
-      },
-      {
-        path:'/collections/:collection',
-        element: <Collections />
-      },
-      {
-        path:'/product/:id',
-        element: <ProductDetails />
-      },
-      {
-        path:'/checkout',
-        element: <CheckOut />
-      },
-      {
-        path:'/order-confirmation',
-        element: <OrderConfirmation />
-      },
-      {
-        path:'/order-details/:id',
-        element: <OrderDetails />
-      },
-    ]
-  }])
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <UserLayout />,
+      children: [
+        {
+          path: '/',
+          element: <Home />
+        },
+        {
+          path: '/login',
+          element: <Login />
+        },
+        {
+          path: '/registration',
+          element: <Registration />
+        },
+        {
+          path: '/orders',
+          element: <Orders />
+        },
+        {
+          path: '/collections/:collection',
+          element: <Collections />
+        },
+        {
+          path: '/product/:id',
+          element: <ProductDetails />
+        },
+        {
+          path: '/checkout',
+          element: <CheckOut />
+        },
+        {
+          path: '/order-confirmation',
+          element: <OrderConfirmation />
+        },
+        {
+          path: '/order-details/:id',
+          element: <OrderDetails />
+        },
+      ]
+    },
+    {
+      path: '/admin',
+      element: <AdminLayout />
+    },
+  ])
 
-  
+
   return (
     <RouterProvider router={router} />
   )

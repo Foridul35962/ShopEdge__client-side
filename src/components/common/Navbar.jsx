@@ -24,6 +24,7 @@ const Navbar = () => {
                     <p>BOTTUM WEAR</p>
                 </div>
                 <div className='flex gap-4 items-center text-2xl'>
+                    <button onClick={()=>navigate('/admin')} className='bg-black text-sm sm:text-lg text-white px-2 text-center cursor-pointer rounded-lg'>Admin</button>
                     <FaUserCircle onClick={()=>navigate('/orders')} className='cursor-pointer' />
                     <div className='relative'>
                         <FaShoppingBag className='cursor-pointer' onClick={()=>setDrawer(!drawer)} />
