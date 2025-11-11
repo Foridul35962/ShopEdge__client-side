@@ -12,6 +12,7 @@ import OrderConfirmation from './pages/OrderConfirmation'
 import OrderDetails from './pages/OrderDetails'
 import AdminLayout from './pages/AdminLayout'
 import AdminHome from './pages/admin/AdminHome'
+import UserManagement from './pages/admin/UserManagement'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -64,7 +65,11 @@ const App = () => {
         {
           path: '/admin',
           element: <AdminHome />
-        }
+        },
+        {
+          path: '/admin/users',
+          element: <UserManagement />
+        },
       ]
     },
   ])

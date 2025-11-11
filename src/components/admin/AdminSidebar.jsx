@@ -10,7 +10,7 @@ const AdminSidebar = ({ setSidebar }) => {
     navigate('/')
   }
   return (
-    <div className='p-4 h-full flex flex-col gap-3'>
+    <div className='p-4 h-full min-h-screen flex flex-col gap-3'>
       <h1 onClick={() => { navigate('/admin'); setSidebar(false) }}
         className='text-2xl text-center cursor-pointer'>ShopEdge</h1>
       <div className='flex flex-col gap-1.5'>
