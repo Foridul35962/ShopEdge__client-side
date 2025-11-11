@@ -17,7 +17,7 @@ const AdminLayout = () => {
       </div>
       <div className='flex gap-3 w-full'>
         <div
-          className={`bg-gray-800 text-white h-screen z-50 w-64 absolute sm:relative transform
+          className={`bg-gray-800 text-white z-50 w-64 absolute sm:relative transform
         ${sidebar ? "translate-x-0" : "-translate-x-full"} transition-all duration-300 sm:translate-x-0`}>
           <AdminSidebar setSidebar={setSidebar} />
         </div>
