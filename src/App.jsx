@@ -14,6 +14,7 @@ import AdminLayout from './components/layout/AdminLayout'
 import AdminHome from './pages/admin/AdminHome'
 import UserManagement from './pages/admin/UserManagement'
 import ProductManagement from './pages/admin/ProductManagement'
+import EditProductPage from './pages/admin/EditProductPage'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -74,6 +75,10 @@ const App = () => {
         {
           path: '/admin/products',
           element: <ProductManagement />
+        },
+        {
+          path: '/admin/products/:id/edit',
+          element: <EditProductPage />
         },
       ]
     },
