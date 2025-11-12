@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import AdminSidebar from '../components/admin/AdminSidebar'
+import AdminSidebar from '../admin/AdminSidebar'
 import { FaBars } from 'react-icons/fa6'
 import { Outlet } from 'react-router-dom'
 
