@@ -13,6 +13,7 @@ import OrderDetails from './pages/OrderDetails'
 import AdminLayout from './pages/AdminLayout'
 import AdminHome from './pages/admin/AdminHome'
 import UserManagement from './pages/admin/UserManagement'
+import ProductManagement from './pages/admin/ProductManagement'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -69,6 +70,10 @@ const App = () => {
         {
           path: '/admin/users',
           element: <UserManagement />
+        },
+        {
+          path: '/admin/products',
+          element: <ProductManagement />
         },
       ]
     },
