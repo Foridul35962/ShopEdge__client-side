@@ -1,13 +1,21 @@
 import React from 'react'
 import verifyOtpImg from '../../assets/VerifyOtp.gif'
+import { verifyEmail } from '../../store/slices/authSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const VerifyOtp = () => {
+const VerifyOtp = ({email}) => {
+    const navigate = useNavigate()
+    const { user, loading, error, otpSent } = useSelector((state) => state.auth);
+    const dispatch = useDispatch()
     const handleSubmit = (e)=>{
         e.preventDefault()
         const formData = {
-            otp : e.target.otp.value
+            otp : e.target.otp.value,
+            email
         }
-        console.log(formData);
+        dispatch(verifyEmail(formData))
+        navigate('/login')
     }
     return (
         <div className='w-full bg-[#61ac8d] py-10 px-2'>
