@@ -17,6 +17,9 @@ import ProductManagement from './pages/admin/ProductManagement'
 import EditProductPage from './pages/admin/EditProductPage'
 import OrderManagement from './pages/admin/OrderManagement'
 
+import { Provider } from 'react-redux'
+import store from './store/store.js'
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -91,7 +94,9 @@ const App = () => {
 
 
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   )
 }
 
