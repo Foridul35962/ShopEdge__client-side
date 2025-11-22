@@ -49,10 +49,10 @@ export const verifyEmail = createAsyncThunk(
       );
 
       if (!response.data.success) {
-        return rejectWithValue({ message: resData.message });
+        return rejectWithValue({ message: response.data.message });
       }
 
-      return user;
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || { message: "OTP verification failed" });
     }
@@ -69,7 +69,8 @@ export const loginUser = createAsyncThunk(
         userData
       );
 
-      if (!response.data.success) {
+      const resData = response.data;
+      if (!resData.success) {
         return rejectWithValue({ message: resData.message });
       }
 
@@ -92,6 +93,52 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   localStorage.removeItem("userToken");
   return null;
 });
+
+//Reset Password request
+export const resetPasswordRequest = createAsyncThunk(
+  "auth/resetPasswordRequest",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/v1/users/forget-pass`, userData)
+      if (!response.data.success) {
+        return rejectWithValue({ message: response.data.message })
+      }
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: "forget password request send failed" })
+    }
+  })
+
+//verify email for reset pass
+export const verifyResetPassEmail = createAsyncThunk(
+  "auth/verifyResetPassEmail",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/v1/users/forget-pass-verify`, userData)
+      if (!response.data.success) {
+        return rejectWithValue({ message: response.data.message })
+      }
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: "forget pass mail verification failed" })
+    }
+  })
+
+//reset password
+export const resetPassword = createAsyncThunk(
+  "auth/resetPass",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/users/reset-pass`, userData)
+      if (!response.data.success) {
+        return rejectWithValue({ message: response.data.message })
+      }
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: 'password reset failed' })
+    }
+  }
+)
 
 // Slice
 const authSlice = createSlice({
@@ -152,6 +199,48 @@ const authSlice = createSlice({
         state.user = null;
         state.error = null;
       });
+
+    //ForgePassRequest
+    builder
+      .addCase(resetPasswordRequest.pending, (state, action) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(resetPasswordRequest.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(resetPasswordRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+
+    //Verify reset password mail
+    builder
+      .addCase(verifyResetPassEmail.pending, (state, action) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(verifyResetPassEmail.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(verifyResetPassEmail.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+
+    //Reset password
+    builder
+      .addCase(resetPassword.pending, (state, action) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
   },
 });
 

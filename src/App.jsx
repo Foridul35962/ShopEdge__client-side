@@ -19,6 +19,7 @@ import OrderManagement from './pages/admin/OrderManagement'
 
 import { Provider } from 'react-redux'
 import store from './store/store.js'
+import ForgetPass from './pages/ForgetPass.jsx'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const App = () => {
         {
           path: '/registration',
           element: <Registration />
+        },
+        {
+          path:'/forget-password',
+          element: <ForgetPass />
         },
         {
           path: '/orders',
