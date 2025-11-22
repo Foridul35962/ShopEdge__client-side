@@ -1,21 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import verifyOtpImg from '../../assets/VerifyOtp.gif'
 import { verifyEmail } from '../../store/slices/authSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const VerifyOtp = ({email}) => {
+const VerifyOtp = ({ email }) => {
     const navigate = useNavigate()
-    const { user, loading, error, otpSent } = useSelector((state) => state.auth);
+    const { user, loading, otpSent } = useSelector((state) => state.auth);
+    const [errMsg, setErrMsg] = useState('')
     const dispatch = useDispatch()
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const formData = {
-            otp : e.target.otp.value,
+            otp: e.target.otp.value,
             email
         }
-        dispatch(verifyEmail(formData))
-        navigate('/login')
+        try {
+            const res = await dispatch(verifyEmail(formData)).unwrap()
+            navigate('/login')
+        } catch (error) {
+            setErrMsg(error.message)
+        }
     }
     return (
         <div className='w-full bg-[#61ac8d] py-10 px-2'>
@@ -29,6 +34,11 @@ const VerifyOtp = ({email}) => {
                         </div>
                         <form onSubmit={handleSubmit} className='flex w-full justify-center  items-center flex-col gap-3'>
                             <input className='py-1 px-2 sm:w-3/4 border-2 rounded-xl text-center font-sans text-gray-800 tracking-widest font-semibold text-xl' type="number" name='otp' placeholder='Enter Otp' required />
+                            {errMsg && (
+                                <p className="text-red-600 flex justify-center font-semibold">
+                                    ❌ {errMsg}
+                                </p>
+                            )}
                             <button className='bg-blue-800 px-3 sm:w-3/4 py-2 rounded-xl cursor-pointer text-white ' type='submit'>Verify & Proccess</button>
                         </form>
                     </div>
