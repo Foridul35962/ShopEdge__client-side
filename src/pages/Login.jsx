@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import loginImg from '../assets/login.webp'
 import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../store/slices/authSlice'
@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 const Login = () => {
     const navigate = useNavigate()
     const { user, loading, error, otpSent } = useSelector((state) => state.auth);
+    const [errMsg, setErrMsg] = useState('')
     const dispatch = useDispatch()
-    const handleSubmit = async (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const formData = {
             email: e.target.email.value,
@@ -16,9 +17,9 @@ const Login = () => {
         }
         try {
             const res = await dispatch(loginUser(formData)).unwrap()
-            navigate('/')
+            navigate("/");
         } catch (error) {
-            console.log(error);
+            setErrMsg(error.message)
         }
     }
     return (
@@ -37,7 +38,13 @@ const Login = () => {
                             <label htmlFor="password" className="font-medium">Password</label>
                             <input required className='border-2 bg-[#61ac8d] px-2 py-1 rounded-xl' type="password" name="password" id="password" placeholder='Enter your password' />
                         </div>
-                        <button className="w-full py-3 bg-[#254236] text-white font-semibold rounded-lg flex justify-center items-center hover:bg-[#152921] transition" type='submit'>Login</button>
+                        {errMsg && (
+                            <p className="text-red-600 flex justify-center font-semibold">
+                                ❌ {errMsg}
+                            </p>
+                        )}
+
+                        <button className={`w-full py-3 bg-[#254236] text-white font-semibold rounded-lg flex justify-center items-center cursor-pointer hover:bg-[#152921] transition ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading} type='submit'>Login</button>
                     </form>
                     <p>Don't have any account? <span
                         className='underline cursor-pointer text-blue-600' onClick={() => navigate('/registration')}>Registration</span>
