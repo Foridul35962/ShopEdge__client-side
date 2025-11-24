@@ -79,7 +79,7 @@ export const fetchedProductDetails = createAsyncThunk(
 
 export const updatedProduct = createAsyncThunk(
     "product/update",
-    async ({productId, productData}) => {
+    async ({ productId, productData }) => {
         const res = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/update-product/${productId}`,
             productData,
             {
@@ -97,6 +97,62 @@ export const similarProducts = createAsyncThunk(
     async (productId) => {
         const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/similar-product/${productId}`)
         return res.data
+    }
+)
+
+export const fetchedAllProduct = createAsyncThunk(
+    "product/all-product",
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/all-product`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+                    }
+                }
+            )
+            return res.data
+        } catch (error) {
+            return rejectWithValue(error?.response?.data || "Something went wrong")
+        }
+    }
+)
+
+export const addProduct = createAsyncThunk(
+    "product/add-product",
+    async (productData, { rejectWithValue }) => {
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/add-product`,
+                productData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+                    }
+                }
+            )
+            return res.data
+        } catch (error) {
+            return rejectWithValue(error?.response?.data || "Something went wrong")
+        }
+    }
+)
+
+export const deleteProduct = createAsyncThunk(
+    "product/delete",
+    async (productData, { rejectWithValue }) => {
+        try {
+            const res = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/delete-product`,
+                {
+                    data: productData,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+                    }
+                }
+            )
+            return res.data
+        } catch (error) {
+            return rejectWithValue(error?.response?.data || "Something went wrong")
+        }
     }
 )
 
@@ -123,72 +179,115 @@ const productSlice = createSlice({
             }
         }
     },
-    extraReducers: (builder)=>{
+    extraReducers: (builder) => {
         //handle fetching products with filter
         builder
-            .addCase(fetchedProductByFilter.pending, (state)=>{
+            .addCase(fetchedProductByFilter.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(fetchedProductByFilter.fulfilled, (state, action)=>{
+            .addCase(fetchedProductByFilter.fulfilled, (state, action) => {
                 state.loading = false
                 state.products = Array.isArray(action.payload) ? action.payload : []
             })
-            .addCase(fetchedProductByFilter.rejected, (state, action)=>{
+            .addCase(fetchedProductByFilter.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
             })
         //handle fetching products with Id
         builder
-            .addCase(fetchedProductDetails.pending, (state)=>{
+            .addCase(fetchedProductDetails.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(fetchedProductDetails.fulfilled, (state, action)=>{
+            .addCase(fetchedProductDetails.fulfilled, (state, action) => {
                 state.loading = false
                 state.selectedProduct = action.payload
             })
-            .addCase(fetchedProductDetails.rejected, (state, action)=>{
+            .addCase(fetchedProductDetails.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
             })
         //handle update products with Id
         builder
-            .addCase(updatedProduct.pending, (state)=>{
+            .addCase(updatedProduct.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(updatedProduct.fulfilled, (state, action)=>{
+            .addCase(updatedProduct.fulfilled, (state, action) => {
                 state.loading = false
                 const updatedProduct = action.payload
-                const index = state.products.findIndex(product=>
+                const index = state.products.findIndex(product =>
                     product._id === updatedProduct._id
                 )
                 if (index !== -1) {
                     state.products[index] = updatedProduct
                 }
             })
-            .addCase(updatedProduct.rejected, (state, action)=>{
+            .addCase(updatedProduct.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
             })
         //handle similar products with Id
         builder
-            .addCase(similarProducts.pending, (state)=>{
+            .addCase(similarProducts.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(similarProducts.fulfilled, (state, action)=>{
+            .addCase(similarProducts.fulfilled, (state, action) => {
                 state.loading = false
                 state.products = Array.isArray(action.payload) ? action.payload : [];
 
             })
-            .addCase(similarProducts.rejected, (state, action)=>{
+            .addCase(similarProducts.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
+        //fetch all product
+        builder
+            .addCase(fetchedAllProduct.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchedAllProduct.fulfilled, (state, action) => {
+                state.loading = false
+                state.products = Array.isArray(action.payload) ? action.payload : [];
+
+            })
+            .addCase(fetchedAllProduct.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
+        //add product
+        builder
+            .addCase(addProduct.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(addProduct.fulfilled, (state, action) => {
+                state.loading = false
+                state.products.push(action.payload)
+            })
+            .addCase(addProduct.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
+            })
+        //fetch all product
+        builder
+            .addCase(deleteProduct.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                state.loading = false
+                state.products = state.products.filter((product) => product._id !== action.payload)
+            })
+            .addCase(deleteProduct.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
             })
     }
 })
 
-export const {setFilters, clearFilters} = productSlice.actions
+export const { setFilters, clearFilters } = productSlice.actions
 export default productSlice.reducer
