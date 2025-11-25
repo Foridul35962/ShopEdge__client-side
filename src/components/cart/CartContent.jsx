@@ -1,31 +1,11 @@
 import React from 'react'
 import { AiFillDelete } from 'react-icons/ai';
 
-const CartContent = () => {
-  const productItem = [
-    {
-      productId: 1,
-      name: 'T- shirt',
-      size: 'M',
-      color: 'Blue',
-      quantity: 2,
-      price: 15,
-      image: 'https://picsum.photos/200?random=1'
-    },
-    {
-      productId: 2,
-      name: 'shirt',
-      size: 'L',
-      color: 'Red',
-      quantity: 3,
-      price: 30,
-      image: 'https://picsum.photos/200?random=2'
-    },
-  ]
+const CartContent = ({cart}) => {
   return (
     <div className='flex flex-col gap-3'>
       {
-        productItem.map((product, idx) => (
+        cart?.map((product, idx) => (
           <div key={idx} className='flex justify-between items-center'>
             <div className='flex gap-2 items-center'>
               <img src={product.image} alt="image" className='size-25 rounded-2xl' />
