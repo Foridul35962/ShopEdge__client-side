@@ -8,7 +8,7 @@ export const fetchCart = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/api/v1/cart/get`,
+                `${import.meta.env.VITE_SERVER_URL}/api/v1/carts/get`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('userToken')}`
@@ -28,7 +28,7 @@ export const addToCart = createAsyncThunk(
     'cart/addToCart',
     async (productData, { rejectWithValue }) => {
         try {
-            const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/v1/cart/add`,
+            const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/v1/carts/add`,
                 productData,
                 {
                     headers: {
@@ -48,7 +48,7 @@ export const updateItemQuantity = createAsyncThunk(
     'cart/updateQuantity',
     async (productData, { rejectWithValue }) => {
         try {
-            const res = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/cart/update-quantity`,
+            const res = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/carts/update-quantity`,
                 productData,
                 {
                     headers: {
@@ -68,7 +68,7 @@ export const deleteItemFromCart = createAsyncThunk(
     'cart/deleteItem',
     async (productData) => {
         try {
-            const res = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/v1/cart/delete`,
+            const res = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/v1/carts/delete`,
                 {
                     data: productData,
                     headers: {
@@ -106,11 +106,11 @@ const cartSlide = createSlice({
             })
             .addCase(fetchCart.fulfilled, (state, action) => {
                 state.loading = false
-                state.cart = Array.isArray(action.payload) ? action.payload : []
+                state.cart = action.payload.data.products.flat()
             })
             .addCase(fetchCart.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.error.message
+                state.error = action
             })
         //add items
         builder
@@ -120,11 +120,25 @@ const cartSlide = createSlice({
             })
             .addCase(addToCart.fulfilled, (state, action) => {
                 state.loading = false
-                state.cart = [...state.cart, action.payload]
+                const newProducts = action.payload.data.products.flat()
+
+                // Create a map of existing cart items
+                const existingMap = new Map()
+                state.cart.forEach(item => {
+                    existingMap.set(`${item.productId}-${item.size}-${item.color}`, item)
+                })
+
+                // Add new items from backend only if they are not already in state
+                newProducts.forEach(item => {
+                    const key = `${item.productId}-${item.size}-${item.color}`
+                    if (!existingMap.has(key)) {
+                        state.cart.push(item)
+                    }
+                })
             })
             .addCase(addToCart.rejected, (state, action) => {
                 state.loading = false
-                state.error = action.error.message
+                state.error = action.payload  // backend message here
             })
         //update quantity
         builder
@@ -134,7 +148,7 @@ const cartSlide = createSlice({
             })
             .addCase(updateItemQuantity.fulfilled, (state, action) => {
                 state.loading = false
-                const updatedItem = action.payload
+                const updatedItem = action.payload.data
                 const index = state.cart.findIndex(item => item._id === updatedItem._id)
                 if (index > -1) {
                     state.cart[index] = updatedItem

@@ -188,7 +188,7 @@ const productSlice = createSlice({
             })
             .addCase(fetchedProductByFilter.fulfilled, (state, action) => {
                 state.loading = false
-                state.products = Array.isArray(action.payload) ? action.payload : []
+                state.products = action.payload.data
             })
             .addCase(fetchedProductByFilter.rejected, (state, action) => {
                 state.loading = false
@@ -202,7 +202,7 @@ const productSlice = createSlice({
             })
             .addCase(fetchedProductDetails.fulfilled, (state, action) => {
                 state.loading = false
-                state.selectedProduct = action.payload
+                state.selectedProduct = action.payload.data
             })
             .addCase(fetchedProductDetails.rejected, (state, action) => {
                 state.loading = false
@@ -236,7 +236,7 @@ const productSlice = createSlice({
             })
             .addCase(similarProducts.fulfilled, (state, action) => {
                 state.loading = false
-                state.products = Array.isArray(action.payload) ? action.payload : [];
+                state.products = action.payload.data
 
             })
             .addCase(similarProducts.rejected, (state, action) => {

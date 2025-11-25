@@ -170,7 +170,6 @@ const authSlice = createSlice({
       })
       .addCase(verifyEmail.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
         state.otpSent = false;
       })
       .addCase(verifyEmail.rejected, (state, action) => {
@@ -186,7 +185,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.data;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
