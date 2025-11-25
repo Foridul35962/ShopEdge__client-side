@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa';
 import { AiOutlineClose } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Searchbar = () => {
   const [searchItem, setSearchItem] = useState('')
   const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = (e)=>{
     e.preventDefault()
     setIsOpen(!isOpen)
+    navigate(`/collections/all?search=${searchItem}`)
   }
 
   return (
