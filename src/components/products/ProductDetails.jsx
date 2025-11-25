@@ -5,22 +5,22 @@ import { fetchedProductDetails, similarProducts } from '../../store/slices/produ
 import Loading from '../common/Loading'
 import ProductGrid from './ProductGrid'
 import { addToCart } from '../../store/slices/cartSlice'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 const ProductDetails = ({ productsId }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { id } = useParams()
     const { selectedProduct, products, loading } = useSelector((state) => state.product)
-    const {error} = useSelector((state)=>state.cart)
-    const {user} = useSelector((state)=>state.auth)
+    const { error } = useSelector((state) => state.cart)
+    const { user } = useSelector((state) => state.auth)
     const [viewImage, setViewImage] = useState(null)
     const productId = productsId || id
 
     //fetched product
     useEffect(() => {
         dispatch(fetchedProductDetails(productId))
-    }, [dispatch])
+    }, [dispatch, productId])
 
     //selected image show
     useEffect(() => {
@@ -30,14 +30,14 @@ const ProductDetails = ({ productsId }) => {
     }, [selectedProduct]);
 
     //similar product
-    useEffect(()=>{
+    useEffect(() => {
         if (!selectedProduct?._id)
             return
-        const similarProduct = async()=>{
+        const similarProduct = async () => {
             dispatch(similarProducts(selectedProduct?._id))
         }
         similarProduct()
-    },[selectedProduct])
+    }, [selectedProduct, productId])
 
     const [selectedColor, setSelectedColor] = useState('')
     const [selectedSize, setSelectedSize] = useState('')
@@ -46,9 +46,9 @@ const ProductDetails = ({ productsId }) => {
     const handleAddingCart = () => {
         if (!user) {
             navigate('/login')
-        }else if (!selectedColor || !selectedSize || !quantity) {
+        } else if (!selectedColor || !selectedSize || !quantity) {
             toast.warning('color/ size are not selected')
-        } else{
+        } else {
             const productData = {
                 productId,
                 quantity,
@@ -56,15 +56,15 @@ const ProductDetails = ({ productsId }) => {
                 color: selectedColor,
                 userId: user._id
             }
-    
+
             dispatch(addToCart(productData))
-            .then(()=>{
-                toast.success('product added to cart')
-            })
-            .catch(()=>{
-                console.log(error.data)
-                toast.error(error.data)
-            })
+                .unwrap()
+                .then(() => {
+                    toast.success("Product added to cart")
+                })
+                .catch((errorMessage) => {
+                    toast.error(errorMessage)
+                })
         }
     }
 
@@ -161,7 +161,7 @@ const ProductDetails = ({ productsId }) => {
                     </div>
                     <div className='mt-8'>
                         <h1 className='text-3xl font-bold text-center'>You May Also Like</h1>
-                        <ProductGrid products={products}/>
+                        <ProductGrid products={products} />
                     </div>
                 </div>)
             }
