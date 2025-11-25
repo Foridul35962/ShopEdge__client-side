@@ -18,10 +18,10 @@ const Navbar = () => {
                     ShopEdge
                 </div>
                 <div className='sm:flex gap-5 hidden *:cursor-pointer'>
-                    <p onClick={()=>navigate('/collections/all')}>MEN</p>
-                    <p>WOMEN</p>
-                    <p>TOP WEAR</p>
-                    <p>BOTTUM WEAR</p>
+                    <p onClick={()=>navigate('/collections/all?gender=Men')}>MEN</p>
+                    <p onClick={()=>navigate('/collections/all?gender=Women')}>WOMEN</p>
+                    <p onClick={()=>navigate('/collections/all?category=Top+Wear')}>TOP WEAR</p>
+                    <p onClick={()=>navigate('/collections/all?category=Bottom+Wear')}>BOTTUM WEAR</p>
                 </div>
                 <div className='flex gap-4 items-center text-2xl'>
                     <button onClick={()=>navigate('/admin')} className='bg-black text-sm sm:text-lg text-white px-2 text-center cursor-pointer rounded-lg'>Admin</button>
