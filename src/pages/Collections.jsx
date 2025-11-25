@@ -52,7 +52,7 @@ const Collections = () => {
                 <div>
                     <SortOptions />
                 </div>
-                <ProductGrid products={products} />
+                <ProductGrid products={products} loading={loading} />
             </div>
         </div>
     )
