@@ -66,7 +66,7 @@ export const updateItemQuantity = createAsyncThunk(
 //remove item from cart
 export const deleteItemFromCart = createAsyncThunk(
     'cart/deleteItem',
-    async (productData) => {
+    async (productData, { rejectWithValue }) => {
         try {
             const res = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/v1/carts/delete`,
                 {
@@ -147,11 +147,11 @@ const cartSlide = createSlice({
                 state.error = null
             })
             .addCase(updateItemQuantity.fulfilled, (state, action) => {
-                state.loading = false
-                const updatedItem = action.payload.data
-                const index = state.cart.findIndex(item => item._id === updatedItem._id)
-                if (index > -1) {
-                    state.cart[index] = updatedItem
+                state.loading = false;
+                const updatedCart = action.payload.data
+
+                if (updatedCart?.products) {
+                    state.cart = updatedCart.products
                 }
             })
             .addCase(updateItemQuantity.rejected, (state, action) => {
@@ -165,10 +165,11 @@ const cartSlide = createSlice({
                 state.error = null
             })
             .addCase(deleteItemFromCart.fulfilled, (state, action) => {
-                state.loading = false
-                if (action.payload?.deletedId) {
+                state.loading = false;
+                const deletedId = action.payload?.data
+                if (deletedId) {
                     state.cart = state.cart.filter(
-                        (item) => item._id !== action.payload.deletedId
+                        (item) => item.productId !== deletedId
                     );
                 }
             })
