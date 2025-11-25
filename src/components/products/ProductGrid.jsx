@@ -9,12 +9,12 @@ const ProductGrid = ({ products }) => {
                 {
                     products.map((product, idx) => (
                         <div
-                            onClick={() => navigate(`/product/${product._id}`)}
+                            onClick={() => navigate(`/product/${product?._id}`)}
                             key={idx}
                             className='hover:scale-105 bg-gray-200 p-3 transition-all duration-300 cursor-pointer rounded-xl'>
-                            <img className='max-h-96 rounded-lg' src={product.image[0].url} alt={product.image[0].altText || 'product'} />
-                            <p className='text-lg font-bold'>{product.name}</p>
-                            <p>{product.price}</p>
+                            <img className='max-h-96 rounded-lg' src={product?.images[0]?.url} alt={product?.images[0]?.altText || 'product'} />
+                            <p className='text-lg font-bold'>{product?.name}</p>
+                            <p>{product?.price}</p>
                         </div>
                     ))
                 }
