@@ -55,6 +55,12 @@ const Carousel = () => {
     };
   }, []);
 
+  // Recalculate scrollButtons whenever products change
+  useEffect(() => {
+    updateScrollButtons();
+  }, [products]);
+
+
   // 🟢 Mouse Drag Start
   const handleDragStart = (e) => {
     isDragging.current = true;
