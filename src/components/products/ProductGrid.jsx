@@ -13,8 +13,8 @@ const ProductGrid = ({ products }) => {
                             key={idx}
                             className='hover:scale-105 bg-gray-200 p-3 transition-all duration-300 cursor-pointer rounded-xl'>
                             <img className='max-h-96 rounded-lg' src={product?.images[0]?.url} alt={product?.images[0]?.altText || 'product'} />
-                            <p className='text-lg font-bold'>{product?.name}</p>
-                            <p>{product?.price}</p>
+                            <p className='text-lg font-bold line-clamp-1'>{product?.name}</p>
+                            <p>${product?.price}</p>
                         </div>
                     ))
                 }
