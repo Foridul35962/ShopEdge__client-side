@@ -1,32 +1,70 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { fetchedProductDetails } from '../../store/slices/productSlice'
-import  Loading  from '../common/Loading'
+import { useNavigate, useParams } from 'react-router-dom'
+import { fetchedProductDetails, similarProducts } from '../../store/slices/productSlice'
+import Loading from '../common/Loading'
+import ProductGrid from './ProductGrid'
+import { addToCart } from '../../store/slices/cartSlice'
+import {toast} from 'react-toastify'
 
 const ProductDetails = ({ productsId }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { id } = useParams()
-    const { selectedProduct, loading, error } = useSelector((state) => state.product)
+    const { selectedProduct, products, loading } = useSelector((state) => state.product)
+    const {error} = useSelector((state)=>state.cart)
+    const {user} = useSelector((state)=>state.auth)
     const [viewImage, setViewImage] = useState(null)
     const productId = productsId || id
+
+    //fetched product
     useEffect(() => {
         dispatch(fetchedProductDetails(productId))
     }, [dispatch])
 
+    //selected image show
     useEffect(() => {
         if (selectedProduct?.images?.length > 0) {
             setViewImage(selectedProduct.images[0]);
         }
     }, [selectedProduct]);
 
+    //similar product
+    useEffect(()=>{
+        if (!selectedProduct?._id)
+            return
+        const similarProduct = async()=>{
+            dispatch(similarProducts(selectedProduct?._id))
+        }
+        similarProduct()
+    },[selectedProduct])
+
     const [selectedColor, setSelectedColor] = useState('')
     const [selectedSize, setSelectedSize] = useState('')
     const [quantity, setQuantity] = useState(1)
 
     const handleAddingCart = () => {
-        if (!selectedColor || !selectedSize || !quantity) {
-            console.log('something is miss');
+        if (!user) {
+            navigate('/login')
+        }else if (!selectedColor || !selectedSize || !quantity) {
+            toast.warning('color/ size are not selected')
+        } else{
+            const productData = {
+                productId,
+                quantity,
+                size: selectedSize,
+                color: selectedColor,
+                userId: user._id
+            }
+    
+            dispatch(addToCart(productData))
+            .then(()=>{
+                toast.success('product added to cart')
+            })
+            .catch(()=>{
+                console.log(error.data)
+                toast.error(error.data)
+            })
         }
     }
 
@@ -57,11 +95,22 @@ const ProductDetails = ({ productsId }) => {
                                 <div className='text-sm font-bold'>
                                     <p>Color:</p>
                                     <div className='flex gap-2 text-sm font-bold'>
-                                        {selectedProduct?.colors.map((color, idx) => (
-                                            <div key={idx} className={`cursor-pointer ${color.toLocaleLowerCase() === selectedColor && 'border-2'}`}
-                                                style={{ backgroundColor: color.toLocaleLowerCase(), width: 30, height: 30, borderRadius: '50%' }}
-                                                onClick={() => setSelectedColor(color.toLocaleLowerCase())}></div>
-                                        ))}
+                                        {selectedProduct?.colors?.map((color, idx) => {
+                                            const normalized = color.toLowerCase(); // selection er jonno normalize
+                                            return (
+                                                <div
+                                                    key={idx}
+                                                    className={`cursor-pointer ${normalized === selectedColor ? 'border-2' : 'border border-gray-700'}`}
+                                                    style={{
+                                                        backgroundColor: color, // IMPORTANT → original color use
+                                                        width: 30,
+                                                        height: 30,
+                                                        borderRadius: '50%'
+                                                    }}
+                                                    onClick={() => setSelectedColor(normalized)}
+                                                ></div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                                 <div className='flex gap-2 items-center text-sm font-bold'>
@@ -109,6 +158,10 @@ const ProductDetails = ({ productsId }) => {
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div className='mt-8'>
+                        <h1 className='text-3xl font-bold text-center'>You May Also Like</h1>
+                        <ProductGrid products={products}/>
                     </div>
                 </div>)
             }
