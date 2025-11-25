@@ -3,88 +3,21 @@ import { FaFilter } from 'react-icons/fa';
 import ProductGrid from '../components/products/ProductGrid';
 import Filter from '../components/filters/Filter';
 import SortOptions from '../components/filters/SortOptions';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchedProductByFilter } from '../store/slices/productSlice';
 
 const Collections = () => {
-    const [products, setProducts] = useState([])
-    useEffect(() => {
-        const fetchedProducts = [
-            {
-                _id: 1,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=1",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 2,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=2",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 3,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=3",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 4,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=4",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 5,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=5",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 6,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=6",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 7,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=7",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
-            {
-                _id: 8,
-                name: 'Product 1',
-                price: 110,
-                image: [{
-                    url: "https://picsum.photos/500/500?random=8",
-                    altText: "Stylish Jacket 1"
-                }]
-            },
+    // const [products, setProducts] = useState([])
+    const {collection} = useParams()
+    const [searchParams] = useSearchParams()
+    const dispatch = useDispatch()
+    const {products, loading, error} = useSelector((state)=>state.product)
+    const queryParams = Object.fromEntries([...searchParams])
 
-        ]
-        setProducts(fetchedProducts)
-    }, [])
-
+    useEffect(()=>{
+        dispatch(fetchedProductByFilter({collection, ...queryParams}))
+    },[dispatch, collection, searchParams])
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -103,8 +36,9 @@ const Collections = () => {
 
 
     return (
-        <div className='px-5 sm:px-0 flex flex-col sm:flex-row gap-0 sm:gap-5 w-full'>
+        <div className='px-5 sm:px-0 flex flex-col sm:flex-row gap-0 sm:gap-5 w-full py-5 sm:py-0'>
             <div className='flex flex-col sm:flex-row'>
+                <p className='text-3xl sm:hidden font-bold text-center'>All Collections</p>
                 <div className='sm:hidden flex justify-between items-center'>
                     <p className='text-2xl font-bold'>Filter</p>
                     <FaFilter ref={filterBtnRef} onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
@@ -114,7 +48,7 @@ const Collections = () => {
                 <Filter setIsSidebarOpen={setIsSidebarOpen} />
             </div>
             <div className='sm:w-4/5 flex flex-col w-full py-3 sm:pr-5'>
-                <p className='text-3xl font-bold text-center'>All Collections</p>
+                <p className='text-3xl hidden sm:block font-bold text-center'>All Collections</p>
                 <div>
                     <SortOptions />
                 </div>
