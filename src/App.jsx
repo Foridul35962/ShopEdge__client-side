@@ -17,6 +17,7 @@ import ProductManagement from './pages/admin/ProductManagement'
 import EditProductPage from './pages/admin/EditProductPage'
 import OrderManagement from './pages/admin/OrderManagement'
 
+import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import ForgetPass from './pages/ForgetPass.jsx'
@@ -101,6 +102,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer />
     </Provider>
   )
 }
