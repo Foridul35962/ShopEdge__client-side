@@ -170,15 +170,15 @@ const orderSlice = createSlice({
             })
         //delete order
         builder
-            .addCase(changeOrderStatus.pending, (state) => {
+            .addCase(deleteOrder.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(changeOrderStatus.fulfilled, (state, action) => {
+            .addCase(deleteOrder.fulfilled, (state, action) => {
                 state.loading = false
                 state.orders = state.orders.filter((order) => order._id !== action.payload)
             })
-            .addCase(changeOrderStatus.rejected, (state, action) => {
+            .addCase(deleteOrder.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
             })
