@@ -47,7 +47,7 @@ const Login = () => {
                         <button className={`w-full py-3 bg-[#254236] text-white font-semibold rounded-lg flex justify-center items-center cursor-pointer hover:bg-[#152921] transition ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading} type='submit'>Login</button>
                     </form>
                     <p>Forget Password? <span
-                        className='underline cursor-pointer text-blue-600' onClick={() => navigate('/forget-password')}>ForgetPassword</span>
+                        className='underline cursor-pointer text-blue-600' onClick={() => navigate('/forget-password')}>click here</span>
                     </p>
                     <p>Don't have any account? <span
                         className='underline cursor-pointer text-blue-600' onClick={() => navigate('/registration')}>Registration</span>
