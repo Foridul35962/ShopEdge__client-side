@@ -80,15 +80,20 @@ export const fetchedProductDetails = createAsyncThunk(
 export const updatedProduct = createAsyncThunk(
     "product/update",
     async ({ productId, productData }) => {
-        const res = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/update-product/${productId}`,
-            productData,
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('userToken')}`
+        try {
+            const res = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/update-product/${productId}`,
+                productData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+                    }
                 }
-            }
-        )
-        return res.data
+            )
+            return res.data
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 )
 
@@ -251,8 +256,7 @@ const productSlice = createSlice({
             })
             .addCase(fetchedAllProduct.fulfilled, (state, action) => {
                 state.loading = false
-                state.products = Array.isArray(action.payload) ? action.payload : [];
-
+                state.products = action.payload.data
             })
             .addCase(fetchedAllProduct.rejected, (state, action) => {
                 state.loading = false
@@ -272,7 +276,7 @@ const productSlice = createSlice({
                 state.loading = false
                 state.error = action.error.message
             })
-        //fetch all product
+        //delete product
         builder
             .addCase(deleteProduct.pending, (state) => {
                 state.loading = true
@@ -280,7 +284,7 @@ const productSlice = createSlice({
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.loading = false
-                state.products = state.products.filter((product) => product._id !== action.payload)
+                state.products = state.products.filter((product) => product._id !== action.payload.data)
             })
             .addCase(deleteProduct.rejected, (state, action) => {
                 state.loading = false

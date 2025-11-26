@@ -1,34 +1,24 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { deleteProduct, fetchedAllProduct } from '../../store/slices/productSlice'
+import Loading from '../../components/common/Loading';
+import { toast } from 'react-toastify'
 
 const ProductManagement = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const {products, loading} = useSelector((state)=>state.product)
 
-    const [products, setProducts] = useState([{
-    }])
+    useEffect(()=>{
+        dispatch(fetchedAllProduct())
+    },[dispatch])
 
-    const getProducts = [
-        {
-            _id: 123,
-            name: 'jacket',
-            price: 5465,
-            sku: 'weioru'
-        },
-        {
-            _id: 123,
-            name: 'jacket',
-            price: 5465,
-            sku: 'weioru'
-        },
-    ]
-
-    useEffect(() => {
-        setProducts(getProducts)
-    }, [])
 
     const handleDeleteproduct = (productId, productName) => {
         if (window.confirm(`Are you really want to Delete ${productName}?`)) {
-            console.log(productId, productName);
+            dispatch(deleteProduct({productId})).unwrap()
+            toast.success('product deleted')
         }
     }
 
@@ -36,7 +26,9 @@ const ProductManagement = () => {
         <div className='p-5 sm:px-10 flex flex-col gap-4'>
             <h1 className='text-3xl font-bold'>Product Management</h1>
             <div className='w-full overflow-scroll sm:overflow-hidden'>
-                <table className='w-full border border-gray-200 rounded-xl shadow-xl'>
+                {
+                    loading? (<Loading/>) : products.length >0 &&
+                    <table className='w-full border border-gray-200 rounded-xl shadow-xl'>
                     <thead className='bg-gray-200'>
                         <tr>
                             <td className="py-3 px-4 text-left font-semibold text-gray-700">NAME</td>
@@ -71,6 +63,7 @@ const ProductManagement = () => {
                         }
                     </tbody>
                 </table>
+                }
             </div>
         </div>
     )

@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 const EditProductPage = () => {
+    const dispatch = useDispatch()
+    const {id} = useParams()
+    const {selectedProduct, loading} = useSelector((state)=>state.product)
+
     const [productData, setProductData] = useState({
         name: '',
         description: '',
