@@ -1,52 +1,27 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { changeOrderStatus, fetchedAllOrder } from '../../store/slices/orderSlice';
+import Loading from '../../components/common/Loading';
 
 const OrderManagement = () => {
+    const dispatch = useDispatch()
+    const {orders, loading} = useSelector((state)=>state.orders)
 
-    const [orders, setOrders] = useState([])
-
-    const getOrders = [
-        {
-            _id: 123,
-            user: {
-                name: 'forid'
-            },
-            totalPrice: 5465,
-            status: 'weioru'
-        },
-
-        {
-            _id: 123,
-            user: {
-                name: 'forid'
-            },
-            totalPrice: 5465,
-            status: 'weioru'
-        },
-
-        {
-            _id: 123,
-            user: {
-                name: 'forid'
-            },
-            totalPrice: 5465,
-            status: 'Delivered'
-        },
-
-    ]
-
-    useEffect(() => {
-        setOrders(getOrders)
-    }, [])
+    useEffect(()=>{
+        dispatch(fetchedAllOrder())
+    },[dispatch])
 
     const handleStatusChange = (orderId, newStatus)=>{
-        console.log(orderId, newStatus);
+        dispatch(changeOrderStatus({orderId, newStatus}))
     }
 
     return (
         <div className='p-5 sm:px-10 flex flex-col gap-4'>
             <h1 className='text-3xl font-bold'>Order Management</h1>
             <div className='w-full overflow-scroll sm:overflow-hidden'>
-                <table className='w-full border border-gray-200 rounded-xl shadow-xl'>
+                {
+                    loading ? (<Loading/>) : orders.length> 0 &&
+                    <table className='w-full border border-gray-200 rounded-xl shadow-xl'>
                     <thead className='bg-gray-200'>
                         <tr>
                             <td className="py-3 px-4 text-left font-semibold text-gray-700">ORDER ID</td>
@@ -89,6 +64,7 @@ const OrderManagement = () => {
                         }
                     </tbody>
                 </table>
+                }
             </div>
         </div>
     )
