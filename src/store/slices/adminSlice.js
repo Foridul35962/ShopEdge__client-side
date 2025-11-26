@@ -99,7 +99,7 @@ const adminSlice = createSlice({
             })
             .addCase(fetchedAllUsers.fulfilled, (state, action)=>{
                 state.loading = false
-                state.users = action.payload
+                state.users = action.payload.data
             })
             .addCase(fetchedAllUsers.rejected, (state, action)=>{
                 state.loading = false
@@ -113,11 +113,11 @@ const adminSlice = createSlice({
             })
             .addCase(addAdmin.fulfilled, (state, action)=>{
                 state.loading = false
-                state.users.push(action.payload)
+                state.users.push(action.payload.data)
             })
             .addCase(addAdmin.rejected, (state, action)=>{
                 state.loading = false
-                state.error = action.error.message
+                state.error = action.payload.error
             })
         //change role
             builder
@@ -127,9 +127,9 @@ const adminSlice = createSlice({
                 })
                 .addCase(changeRole.fulfilled, (state, action)=>{
                     state.loading = false
-                    const updateIdx = state.users.findIndex((user)=>user._id === action.payload._id)
+                    const updateIdx = state.users.findIndex((user)=>user._id === action.payload.data._id)
                     if (updateIdx > -1) {
-                        state.users[updateIdx] = action.payload
+                        state.users[updateIdx] = action.payload.data
                     }
                 })
                 .addCase(changeRole.rejected, (state, action)=>{
@@ -144,7 +144,7 @@ const adminSlice = createSlice({
                 })
                 .addCase(deleteUser.fulfilled, (state, action)=>{
                     state.loading = false
-                    state.users = state.users.filter((user)=>user._id !== action.payload)
+                    state.users = state.users.filter((user)=>user._id !== action.payload.data)
                 })
                 .addCase(deleteUser.rejected, (state, action)=>{
                     state.loading = false
