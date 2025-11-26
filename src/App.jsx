@@ -22,6 +22,7 @@ import { Provider } from 'react-redux'
 import store from './store/store.js'
 import ForgetPass from './pages/ForgetPass.jsx'
 import Error from './pages/Error.jsx'
+import ProtectedRoutes from './components/common/ProtectedRoutes.jsx'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -42,7 +43,7 @@ const App = () => {
           element: <Registration />
         },
         {
-          path:'/forget-password',
+          path: '/forget-password',
           element: <ForgetPass />
         },
         {
@@ -73,7 +74,10 @@ const App = () => {
     },
     {
       path: '/admin',
-      element: <AdminLayout />,
+      element:
+        <ProtectedRoutes role={'admin'}>
+          <AdminLayout />
+        </ProtectedRoutes>,
       children: [
         {
           path: '/admin',
