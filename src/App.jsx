@@ -21,6 +21,7 @@ import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import ForgetPass from './pages/ForgetPass.jsx'
+import Error from './pages/Error.jsx'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -96,6 +97,10 @@ const App = () => {
         },
       ]
     },
+    {
+      path: '/*',
+      element: <Error />
+    }
   ])
 
 

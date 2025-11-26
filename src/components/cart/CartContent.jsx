@@ -3,6 +3,7 @@ import { AiFillDelete } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { deleteItemFromCart, updateItemQuantity } from '../../store/slices/cartSlice';
 import { toast } from 'react-toastify'
+import emptyCart from '../../assets/empty-cart.png'
 
 const CartContent = ({ cart }) => {
   const dispatch = useDispatch()
@@ -54,7 +55,11 @@ const CartContent = ({ cart }) => {
   return (
     <div className='flex flex-col gap-3'>
       {
-        !cart.length > 0 ? (<p>Cart is empty</p>) :
+        !cart.length > 0 ? (
+          <div>
+            <img src={emptyCart} alt="Cart is empty" />
+          </div>
+        ) :
           cart?.map((product, idx) => (
             <div key={idx} className='flex justify-between items-center'>
               <div className='flex gap-2 items-center'>

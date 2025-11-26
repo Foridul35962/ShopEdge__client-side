@@ -6,6 +6,8 @@ import Loading from '../common/Loading'
 import ProductGrid from './ProductGrid'
 import { addToCart } from '../../store/slices/cartSlice'
 import { toast } from 'react-toastify'
+import Lottie from 'lottie-react'
+import Error404 from '../../assets/No-Data.json'
 
 const ProductDetails = ({ productsId }) => {
     const dispatch = useDispatch()
@@ -70,7 +72,11 @@ const ProductDetails = ({ productsId }) => {
 
     return (
         <div>
-            {loading ? (<Loading />) : (
+            {loading ? (<Loading />) : (!selectedProduct ? (
+                <div className='h-100 lg:h-dvh'>
+                    <Lottie animationData={Error404} className='h-100 lg:h-dvh'></Lottie>
+                </div>
+            ) :
                 <div className='container mx-auto p-5 sm:px-0'>
                     <div className='flex gap-3 md:gap-10 lg:gap-20 flex-col sm:flex-row sm:items-center'>
                         <div className='flex flex-col-reverse sm:flex-row gap-3'>
