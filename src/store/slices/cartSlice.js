@@ -85,6 +85,7 @@ export const deleteItemFromCart = createAsyncThunk(
 
 const initialState = {
     cart: [],
+    totalPrice: 0,
     loading: false,
     error: null
 }
@@ -107,6 +108,7 @@ const cartSlide = createSlice({
             .addCase(fetchCart.fulfilled, (state, action) => {
                 state.loading = false
                 state.cart = action.payload.data.products.flat()
+                state.totalPrice = action.payload.data.totalPrice
             })
             .addCase(fetchCart.rejected, (state, action) => {
                 state.loading = false
@@ -120,6 +122,7 @@ const cartSlide = createSlice({
             })
             .addCase(addToCart.fulfilled, (state, action) => {
                 state.loading = false
+                state.totalPrice = action.payload.data.totalPrice
                 const newProducts = action.payload.data.products.flat()
 
                 // Create a map of existing cart items

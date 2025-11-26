@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react';
 import { fetchCart } from '../../store/slices/cartSlice';
+import { toast } from 'react-toastify'
 
 const CartDrawer = ({ drawer, setDrawer }) => {
     const navigate = useNavigate()
@@ -23,7 +24,12 @@ const CartDrawer = ({ drawer, setDrawer }) => {
         if (!user) {
             navigate('/login')
         } else {
-            navigate('/checkout')
+            if (cart.length>0) {
+                navigate('/checkout')
+            } else{
+                toast.warning('purchase some product')
+                navigate('/collections/all')
+            }
         }
     }
 
