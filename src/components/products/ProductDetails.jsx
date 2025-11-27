@@ -146,7 +146,7 @@ const ProductDetails = ({ productsId }) => {
                                     </div>
                                 </div>
                                 <button onClick={handleAddingCart}
-                                    className='bg-blue-800 text-black px-4 sm:px-3 cursor-pointer py-2 sm:py-1 rounded-lg hover:bg-blue-900 transition-all transform duration-300'>ADD TO CART</button>
+                                    className='bg-blue-800 text-white px-4 sm:px-3 cursor-pointer py-2 sm:py-1 rounded-lg hover:bg-blue-900 transition-all transform duration-300'>ADD TO CART</button>
                             </div>
                             <div>
                                 <h2 className='text-sm font-bold'>Characteristics:</h2>
