@@ -9,6 +9,8 @@ const OrderDetails = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
     const { orderDetails, loading } = useSelector((state) => state.orders)
+    console.log(orderDetails);
+    
     useEffect(() => {
         dispatch(fetchedOrderDetails(id))
     }, [dispatch])
@@ -31,10 +33,9 @@ const OrderDetails = () => {
 
                                     {/* Delivery status */}
                                     <p
-                                        className={`px-2 py-1 w-fit rounded-xl ${orderDetails?.isDelivered ? 'bg-green-400' : 'bg-amber-200'
-                                            }`}
+                                        className={`px-2 py-1 w-fit rounded-xl bg-green-400`}
                                     >
-                                        {orderDetails?.isDelivered ? 'Delivered' : 'Pending'}
+                                        {orderDetails?.status}
                                     </p>
                                 </div>
 
