@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import verifyOtpImg from '../../assets/VerifyOtp.gif'
+import verifyOtpImg from '../../assets/verifyOtp.gif'
 import { verifyEmail } from '../../store/slices/authSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
