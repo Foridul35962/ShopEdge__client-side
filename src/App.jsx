@@ -23,6 +23,7 @@ import store from './store/store.js'
 import ForgetPass from './pages/ForgetPass.jsx'
 import Error from './pages/Error.jsx'
 import ProtectedRoutes from './components/common/ProtectedRoutes.jsx'
+import AddProductPage from './pages/admin/AddProductPage.jsx'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -94,6 +95,10 @@ const App = () => {
         {
           path: '/admin/products/:id/edit',
           element: <EditProductPage />
+        },
+        {
+          path: '/admin/products/add',
+          element: <AddProductPage />
         },
         {
           path: '/admin/orders',

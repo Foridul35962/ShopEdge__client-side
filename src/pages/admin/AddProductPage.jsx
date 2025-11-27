@@ -1,33 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { fetchedProductDetails, updatedProduct } from "../../store/slices/productSlice";
-import { toast } from 'react-toastify'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addProduct } from "../../store/slices/productSlice";
+import { toast } from "react-toastify";
 
-const EditProductPage = () => {
+const AddProductPage = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate()
-    const { id } = useParams();
-    const { selectedProduct, loading } = useSelector((state) => state.product);
+    const navigate = useNavigate();
 
-    // Local state for form data
-    const [productData, setProductData] = useState(null);
-    const [newImages, setNewImages] = useState([]);
-    const [deleteImageIds, setDeleteImageIds] = useState([]);
+    // Local state
+    const [productData, setProductData] = useState({
+        name: "",
+        description: "",
+        price: "",
+        discountPrice: "",
+        countInStock: "",
+        sku: "",
+        category: "",
+        brand: "",
+        sizes: [],
+        colors: [],
+        collections: "",
+        material: "",
+        gender: "",
+        tags: "",
+    });
 
-    // Fetch product details
-    useEffect(() => {
-        dispatch(fetchedProductDetails(id));
-    }, [dispatch, id]);
-
-    // Sync selectedProduct → productData
-    useEffect(() => {
-        if (selectedProduct) {
-            setProductData({ ...selectedProduct });
-        }
-    }, [selectedProduct]);
-
-    if (!productData) return <p className="text-center mt-10">Loading...</p>;
+    const [images, setImages] = useState([]);
 
     // Generic input update
     const handleChange = (e) => {
@@ -43,58 +42,51 @@ const EditProductPage = () => {
         }));
     };
 
-    // Image Selection
+    // Image selection
     const handleUploadImage = (e) => {
         const files = Array.from(e.target.files);
-        setNewImages(files);
+        setImages(files);
     };
 
-    // Mark old image for delete
-    const handleDeleteImage = (publicId) => {
-        setDeleteImageIds((prev) => [...prev, publicId]);
-
-        // Remove from preview
-        setProductData((prev) => ({
-            ...prev,
-            images: prev.images.filter((img) => img.imagePublicIds !== publicId),
-        }));
-    };
-
-    // Submit Form
-    const handleSubmit = (e) => {
+    // Submit form
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const updatePayload = {
-            name: productData.name,
-            description: productData.description,
-            price: productData.price,
-            discountPrice: productData.discountPrice,
-            countInStock: productData.countInStock,
-            sku: productData.sku,
-            category: productData.category,
-            brand: productData.brand,
-            sizes: productData.sizes,
-            colors: productData.colors,
-            collections: productData.collections,
-            material: productData.material,
-            gender: productData.gender,
-            tags: productData.tags,
-            isFeatured: productData.isFeatured,
-            isPublished: productData.isPublished,
-            deleteImageIds: deleteImageIds,
-            newImages: newImages,
+
+        if (images.length === 0) {
+            toast.error("Please upload at least one image");
+            return;
         }
 
+        // Ensure required fields
+        if (!productData.name || !productData.description || !productData.price || !productData.countInStock || !productData.sku || !productData.category || !productData.collections || productData.sizes.length === 0 || productData.colors.length === 0) {
+            toast.error("Please fill all required fields");
+            return;
+        }
+
+        const formData = new FormData();
+
+        // Numbers
+        formData.append("price", Number(productData.price));
+        formData.append("discountPrice", Number(productData.discountPrice || 0));
+        formData.append("countInStock", Number(productData.countInStock));
+
+        // Strings
+        ["name", "description", "sku", "category", "brand", "collections", "material", "gender", "tags"]
+            .forEach(key => formData.append(key, productData[key]));
+
+        // Arrays
+        productData.sizes.forEach(size => formData.append("sizes", size));
+        productData.colors.forEach(color => formData.append("colors", color));
+
+        // Images
+        images.forEach(img => formData.append("files", img));
+
         try {
-            dispatch(
-                updatedProduct({
-                    productId: id,
-                    productData: updatePayload,
-                })
-            ).unwrap()
-            toast.success('product updated')
-            navigate('/admin/products')
-        } catch (message) {
-            toast.error(message)
+            await dispatch(addProduct(formData)).unwrap();
+            toast.success("Product added successfully");
+            navigate("/admin/products");
+        } catch (err) {
+            toast.error(err.message || "Something went wrong");
         }
     };
 
@@ -102,7 +94,7 @@ const EditProductPage = () => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
             <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8">
-                <h1 className="text-3xl font-bold mb-6 text-center">Edit Product</h1>
+                <h1 className="text-3xl font-bold mb-6 text-center">Add Product</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Name */}
@@ -114,6 +106,7 @@ const EditProductPage = () => {
                             value={productData.name}
                             onChange={handleChange}
                             className="w-full border px-4 py-2 rounded"
+                            required
                         />
                     </div>
 
@@ -126,7 +119,8 @@ const EditProductPage = () => {
                             value={productData.description}
                             onChange={handleChange}
                             className="w-full border px-4 py-2 rounded"
-                        ></textarea>
+                            required
+                        />
                     </div>
 
                     {/* Price + Stock */}
@@ -139,6 +133,7 @@ const EditProductPage = () => {
                                 value={productData.price}
                                 onChange={handleChange}
                                 className="w-full border px-4 py-2 rounded"
+                                required
                             />
                         </div>
                         <div>
@@ -149,25 +144,24 @@ const EditProductPage = () => {
                                 value={productData.countInStock}
                                 onChange={handleChange}
                                 className="w-full border px-4 py-2 rounded"
+                                required
                             />
                         </div>
                     </div>
 
                     {/* Other text fields */}
-                    {["sku", "category", "brand", "collections", "material"].map(
-                        (field) => (
-                            <div key={field}>
-                                <label className="block mb-1 capitalize">{field}</label>
-                                <input
-                                    type="text"
-                                    name={field}
-                                    value={productData[field]}
-                                    onChange={handleChange}
-                                    className="w-full border px-4 py-2 rounded"
-                                />
-                            </div>
-                        )
-                    )}
+                    {["sku", "category", "brand", "collections", "material", "tags"].map((field) => (
+                        <div key={field}>
+                            <label className="block mb-1 capitalize">{field}</label>
+                            <input
+                                type="text"
+                                name={field}
+                                value={productData[field]}
+                                onChange={handleChange}
+                                className="w-full border px-4 py-2 rounded"
+                            />
+                        </div>
+                    ))}
 
                     {/* Sizes & Colors */}
                     <div className="grid grid-cols-2 gap-4">
@@ -178,6 +172,7 @@ const EditProductPage = () => {
                                 value={productData.sizes.join(", ")}
                                 onChange={(e) => handleArrayChange(e, "sizes")}
                                 className="w-full border px-4 py-2 rounded"
+                                placeholder="e.g. S, M, L"
                             />
                         </div>
                         <div>
@@ -187,6 +182,7 @@ const EditProductPage = () => {
                                 value={productData.colors.join(", ")}
                                 onChange={(e) => handleArrayChange(e, "colors")}
                                 className="w-full border px-4 py-2 rounded"
+                                placeholder="e.g. Red, Blue"
                             />
                         </div>
                     </div>
@@ -203,6 +199,7 @@ const EditProductPage = () => {
                                         value={g}
                                         checked={productData.gender === g}
                                         onChange={handleChange}
+                                        required
                                     />
                                     {g}
                                 </label>
@@ -210,47 +207,23 @@ const EditProductPage = () => {
                         </div>
                     </div>
 
-                    {/* Upload New Images */}
+                    {/* Upload Images */}
                     <div>
-                        <label>Upload New Images</label>
+                        <label>Upload Images</label>
                         <input
                             type="file"
                             multiple
                             onChange={handleUploadImage}
                             className="w-full border px-2 py-1 rounded"
+                            required
                         />
-                    </div>
-
-                    {/* Old Images Preview */}
-                    <div>
-                        <label className="font-semibold">Existing Images</label>
-                        <div className="grid grid-cols-3 gap-3 mt-2">
-                            {productData.images.map((img, idx) => (
-                                <div key={idx} className="relative">
-                                    <img
-                                        src={img.url}
-                                        alt=""
-                                        className="w-full h-24 object-cover rounded"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            handleDeleteImage(img.imagePublicIds)
-                                        }
-                                        className="absolute top-1 right-1 bg-red-500 text-white px-2 rounded text-xs"
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 rounded"
+                        className="w-full bg-green-600 text-white py-2 rounded"
                     >
-                        Update Product
+                        Add Product
                     </button>
                 </form>
             </div>
@@ -258,4 +231,4 @@ const EditProductPage = () => {
     );
 };
 
-export default EditProductPage;
+export default AddProductPage;

@@ -79,23 +79,25 @@ export const fetchedProductDetails = createAsyncThunk(
 
 export const updatedProduct = createAsyncThunk(
     "product/update",
-    async ({ productId, productData }) => {
+    async ({ productId, productData }, { rejectWithValue }) => {
         try {
-            const res = await axios.patch(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/update-product/${productId}`,
+            const res = await axios.patch(
+                `${import.meta.env.VITE_SERVER_URL}/api/v1/products/update-product/${productId}`,
                 productData,
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+                        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+                        "Content-Type": "multipart/form-data"
                     }
                 }
-            )
-            return res.data
+            );
+            return res.data;
         } catch (error) {
-            console.log(error);
-            
+            return rejectWithValue(error?.response?.data || "Something went wrong")
         }
     }
-)
+);
+
 
 export const similarProducts = createAsyncThunk(
     'product/similarProducts',
@@ -127,16 +129,20 @@ export const addProduct = createAsyncThunk(
     "product/add-product",
     async (productData, { rejectWithValue }) => {
         try {
-            const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/v1/products/add-product`,
+            const res = await axios.post(
+                `${import.meta.env.VITE_SERVER_URL}/api/v1/products/add-product`,
                 productData,
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('userToken')}`
-                    }
+                        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+                        "Content-Type": "multipart/form-data", // IMPORTANT
+                    },
                 }
             )
             return res.data
         } catch (error) {
+            console.log(error);
+
             return rejectWithValue(error?.response?.data || "Something went wrong")
         }
     }
@@ -220,13 +226,13 @@ const productSlice = createSlice({
                 state.error = null
             })
             .addCase(updatedProduct.fulfilled, (state, action) => {
-                state.loading = false
-                const updatedProduct = action.payload
-                const index = state.products.findIndex(product =>
-                    product._id === updatedProduct._id
-                )
-                if (index !== -1) {
-                    state.products[index] = updatedProduct
+                const updated = action.payload?.data
+                if (!updated) return   // 🛑 null/undefined stop here
+
+                if (state.selectedProduct) {
+                    Object.keys(updated).forEach(key => {
+                        state.selectedProduct[key] = updated[key]
+                    })
                 }
             })
             .addCase(updatedProduct.rejected, (state, action) => {
