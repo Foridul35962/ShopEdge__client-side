@@ -9,7 +9,6 @@ const OrderDetails = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
     const { orderDetails, loading } = useSelector((state) => state.orders)
-    console.log(orderDetails);
     
     useEffect(() => {
         dispatch(fetchedOrderDetails(id))
