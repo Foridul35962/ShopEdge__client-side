@@ -6,6 +6,7 @@ import CartDrawer from '../cart/CartDrawer';
 import { HiMenuAlt2, HiMenuAlt3 } from 'react-icons/hi';
 import Menu from './Menu';
 import { useSelector } from 'react-redux';
+import ShopEdge from '../../assets/ShopEdge.png'
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -25,7 +26,7 @@ const Navbar = () => {
             <Menu menu={menu} setMenu={setMenu} />
             <div className='container mx-auto flex justify-between items-center p-2'>
                 <div onClick={() => navigate('/')} className='cursor-pointer text-xl sm:text-2xl'>
-                    ShopEdge
+                    <img className='w-30' src={ShopEdge} alt="ShopEdge" />
                 </div>
                 <div className='sm:flex gap-5 hidden *:cursor-pointer'>
                     <p onClick={() => navigate('/collections/all?gender=Men')}>MEN</p>
