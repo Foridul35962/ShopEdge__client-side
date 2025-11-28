@@ -12,6 +12,8 @@ const RegistrationDesign = ({ setVerify, setEmail }) => {
     const dispatch = useDispatch()
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setErrMsg('')
+        setError([])
         const formData = {
             name: e.target.name.value,
             email: e.target.email.value,

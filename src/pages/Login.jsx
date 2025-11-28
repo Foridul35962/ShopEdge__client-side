@@ -11,6 +11,7 @@ const Login = () => {
     const dispatch = useDispatch()
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setErrMsg('')
         const formData = {
             email: e.target.email.value,
             password: e.target.password.value
