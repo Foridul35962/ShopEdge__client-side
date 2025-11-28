@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeOrderStatus, fetchedAllOrder } from '../../store/slices/orderSlice';
 import Loading from '../../components/common/Loading';
+import { useNavigate } from 'react-router-dom';
 
 const OrderManagement = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {orders, loading} = useSelector((state)=>state.orders)
 
     useEffect(()=>{
@@ -37,7 +39,7 @@ const OrderManagement = () => {
                                 <tr key={idx}
                                     className="border-t border-gray-200 odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
                                 >
-                                    <td className="py-3 px-4 text-gray-700">{order._id}</td>
+                                    <td onClick={()=>navigate(`/admin/order-details/${order._id}`)} className="py-3 px-4 text-gray-700 hover:underline cursor-pointer">{order._id}</td>
                                     <td className="py-3 px-4 text-gray-700">{order.user.name}</td>
                                     <td className="py-3 px-4 text-gray-700">{order.totalPrice}</td>
                                     <td>

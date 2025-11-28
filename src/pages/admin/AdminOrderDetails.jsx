@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchedOrderDetails } from '../store/slices/orderSlice'
-import Loading from '../components/common/Loading'
 
-const OrderDetails = () => {
+import Loading from '../../components/common/Loading'
+import { fetchedOrderDetails } from '../../store/slices/orderSlice'
+
+const AdminOrderDetails = () => {
     const navigate = useNavigate()
     const { id } = useParams()
     const dispatch = useDispatch()
@@ -83,8 +84,7 @@ const OrderDetails = () => {
                                                         />
                                                     </td>
                                                     <td
-                                                        onClick={() => navigate(`/product/${item.productId}`)}
-                                                        className="py-3 px-4 font-medium text-gray-800 cursor-pointer hover:underline"
+                                                        className="py-3 px-4 font-medium text-gray-800"
                                                     >
                                                         {item.name}
                                                     </td>
@@ -99,8 +99,8 @@ const OrderDetails = () => {
                                     </table>
                                 </div>
                                 <h4
-                                    onClick={() => navigate('/orders')}
-                                    className='underline text-blue-700 cursor-pointer'>Back to My Order</h4>
+                                    onClick={() => navigate('/admin/orders')}
+                                    className='underline text-blue-700 cursor-pointer'>Back Order Management</h4>
                             </div>
                         </div>}
             </div>
@@ -108,4 +108,4 @@ const OrderDetails = () => {
     )
 }
 
-export default OrderDetails
+export default AdminOrderDetails

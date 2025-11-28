@@ -24,6 +24,7 @@ import ForgetPass from './pages/ForgetPass.jsx'
 import Error from './pages/Error.jsx'
 import ProtectedRoutes from './components/common/ProtectedRoutes.jsx'
 import AddProductPage from './pages/admin/AddProductPage.jsx'
+import AdminOrderDetails from './pages/admin/AdminOrderDetails.jsx'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -103,6 +104,10 @@ const App = () => {
         {
           path: '/admin/orders',
           element: <OrderManagement />
+        },
+        {
+          path: '/admin/order-details/:id',
+          element: <AdminOrderDetails />
         },
       ]
     },
